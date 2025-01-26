@@ -10,7 +10,7 @@ export const signupController = async (req, res) => {
 
     if (!fullName || !email || !password) {
       return res.json({
-        msg: "full name, email and password are required",
+        msg: "Fill all fields",
         success: false,
         error: true,
       });
@@ -18,7 +18,7 @@ export const signupController = async (req, res) => {
 
     if (password.length < 6) {
       return res.status(400).json({
-        msg: "Password must be at least 6 characters",
+        msg: "Password should be at least 6 characters",
         success: false,
         error: true,
       });
@@ -49,7 +49,7 @@ export const signupController = async (req, res) => {
     return res.status(200).json({
       msg: `User ${fullName} created successfully`,
       data: createUser,
-      succes: true,
+      success: true,
       error: false,
     });
   } catch (error) {

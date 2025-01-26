@@ -1,6 +1,6 @@
-import MessageModel from "../models/message.model";
-import UserModel from "../models/user.model";
-import cloudinary from "../utils/cloudinary";
+import MessageModel from "../models/message.model.js";
+import UserModel from "../models/user.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 //display all user msg controller (for left side bar)
 export const leftSideBarMsgController = async (req, res) => {
