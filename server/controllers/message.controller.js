@@ -33,7 +33,7 @@ export const getMessageController = async (req, res) => {
     const { id: receiverId } = req.params;
     const myId = req.userId; //getting user id from middleware
 
-    const msg = await UserModel.find({
+    const msg = await MessageModel.find({
       $or: [
         { senderId: myId, receiverId: receiverId },
         { senderId: receiverId, receiverId: myId },
@@ -62,13 +62,26 @@ export const sendMessageController = async (req, res) => {
     const myId = req.userId; //getting user id from middleware
     const { text, image } = req.body;
 
-    const cloudImageRes = await cloudinary.uploader.upload(image);
+    if (!text && !image) {
+      return res.status(400).json({
+        msg: "Message must contain text or an image",
+        success: false,
+        error: true,
+      });
+    }
+
+    let uploadingImageUrl = null;
+
+    if (image) {
+      const cloudImageRes = await cloudinary.uploader.upload(image);
+      uploadingImageUrl = cloudImageRes.secure_url;
+    }
 
     const createMessage = new MessageModel({
       senderId: myId,
       receiverId,
       text,
-      image: cloudImageRes.secure_url,
+      image: uploadingImageUrl,
     });
 
     await createMessage.save();

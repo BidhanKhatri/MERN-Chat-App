@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import axiosInstance from "../utils/axiosInstace";
 import { toast } from "react-toastify";
 const useChatStore = create((set) => ({
@@ -7,10 +7,15 @@ const useChatStore = create((set) => ({
   isLogin: false,
   isSignup: false,
   isUpdatingProfile: false,
+  isGettingLeftSideMsg: false,
   userName: null,
   userEmail: null,
+  userId: "",
   userProfilePic: null,
   userCreatedDate: null,
+  leftSideMsgData: [],
+  selectedUser: null,
+  messages: [],
 
   checkAuth: async () => {
     try {
@@ -22,6 +27,7 @@ const useChatStore = create((set) => ({
           userEmail: res.data.data.email,
           userCreatedDate: res.data.data.createdAt,
           userProfilePic: res.data.data.profilePic,
+          userId: res.data.data._id,
           isAuthChecking: false,
         });
       } else {
@@ -105,6 +111,50 @@ const useChatStore = create((set) => ({
       set({ isUpdatingProfile: false }); // Reset updating state
     }
   },
+
+  getLeftSideMsg: async () => {
+    try {
+      set({ isGettingLeftSideMsg: true });
+      const res = await axiosInstance.get("/message/left-side-bar-msg");
+
+      if (res.data.sucess && Array.isArray(res.data.data)) {
+        set({ leftSideMsgData: res.data.data });
+        return res.data.data;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set({ isGettingLeftSideMsg: false });
+    }
+  },
+
+  getMessage: async (userId) => {
+    try {
+      const res = await axiosInstance.get(`/message/${userId}`);
+      if (res.data && res.data.sucess) {
+        set({ messages: res.data.data });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  sendMessage: async (chatData, receiverId) => {
+    try {
+      const payload = {
+        text: chatData.text,
+        image: chatData.image || null,
+      };
+      const res = await axiosInstance.post(
+        `/message/send/${receiverId}`,
+        payload
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  setSelectedUser: (user) => set({ selectedUser: user }),
 }));
 
 export default useChatStore;

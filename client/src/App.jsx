@@ -9,7 +9,7 @@ function App() {
 
       <ToastContainer />
 
-      <main className="min-h-screen ">
+      <main className="max-h-[calc(100vh-70px)]  overflow-hidden">
         <Outlet />
       </main>
     </>

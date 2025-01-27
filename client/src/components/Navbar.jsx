@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-slate-950 px-16 py-4 text-gray-300 flex justify-between items-center shadow-md border-b border-neutral-700">
+    <nav className="bg-slate-900 px-10 py-4 text-gray-300 flex justify-between items-center shadow-md border-b border-neutral-700">
       <Link to={"/"}>
         <p className="text-2xl font-bold">Chat App</p>
       </Link>

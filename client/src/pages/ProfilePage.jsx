@@ -47,6 +47,7 @@ const ProfilePage = () => {
 
         <form className="space-y-6 mt-8">
           {/* FullName */}
+
           <div className="flex items-center border rounded-md border-neutral-500 p-3">
             <FaUser className="text-neutral-400 mr-3" />
             <input
@@ -58,6 +59,7 @@ const ProfilePage = () => {
               readOnly
             />
           </div>
+
           {/* Email */}
           <div className="flex items-center border rounded-md border-neutral-500 p-3">
             <FaEnvelope className="text-neutral-400 mr-3" />
