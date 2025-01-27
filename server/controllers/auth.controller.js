@@ -97,6 +97,7 @@ export const loginController = async (req, res) => {
 
     return res.status(200).json({
       msg: "Login successfull",
+
       success: true,
       error: false,
     });
@@ -180,10 +181,13 @@ export const authUserController = async (req, res) => {
         error: true,
       });
     }
+    const findUser = await UserModel.findById(userId).select("-password");
+
     return res.status(200).json({
       msg: "User authenticated successfully",
       success: true,
       error: false,
+      data: findUser,
     });
   } catch (error) {
     return res.status(500).json({

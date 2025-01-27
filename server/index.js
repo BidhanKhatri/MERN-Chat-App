@@ -15,6 +15,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow credentials (cookies, etc.)
   })
 );

@@ -6,6 +6,7 @@ import {
   FaArrowRight,
   FaEyeSlash,
   FaRegEye,
+  FaHandPaper,
 } from "react-icons/fa";
 import Lottie from "lottie-react";
 import animationData from "../assets/animations/signup-ani.json";
@@ -46,7 +47,7 @@ const SignupPage = () => {
     <div className="grid grid-cols-2 place-items-center min-h-[90vh] ">
       <div className="p-8 rounded-lg  w-full max-w-lg ">
         <div className="text-2xl  bg-gradient-to-r from-purple-400 to-pink-400 mb-10 flex items-center gap-4 tracking-wider w-fit bg-clip-text text-transparent font-semibold">
-          <FaEnvelope className="text-neutral-200 " />
+          <FaHandPaper className="text-neutral-200 " />
           Hey! Sign Up to Chat App
         </div>
 
