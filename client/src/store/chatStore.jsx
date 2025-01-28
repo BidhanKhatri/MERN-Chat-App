@@ -1,7 +1,11 @@
 import { create, useStore } from "zustand";
 import axiosInstance from "../utils/axiosInstace";
 import { toast } from "react-toastify";
-const useChatStore = create((set) => ({
+import { disconnect } from "mongoose";
+const BaseUrl = "http://localhost:5000";
+import { io } from "socket.io-client";
+
+const useChatStore = create((set, get) => ({
   authUser: null,
   isAuthChecking: true,
   isLogin: false,
@@ -16,6 +20,8 @@ const useChatStore = create((set) => ({
   leftSideMsgData: [],
   selectedUser: null,
   messages: [],
+  onlineUsers: [],
+  socket: null,
 
   checkAuth: async () => {
     try {
@@ -30,6 +36,7 @@ const useChatStore = create((set) => ({
           userId: res.data.data._id,
           isAuthChecking: false,
         });
+        get().connectSocket();
       } else {
         set({ authUser: null, isAuthChecking: false });
       }
@@ -47,6 +54,7 @@ const useChatStore = create((set) => ({
       if (result.data && result.data.success) {
         set({ authUser: true, isSignup: false });
         toast.success(result.data.msg);
+        get().connectSocket();
       } else {
         toast.error(result.data.msg);
       }
@@ -70,6 +78,7 @@ const useChatStore = create((set) => ({
           authUser: true,
           isLogin: false,
         });
+        get().connectSocket();
       }
     } catch (error) {
       console.log(error);
@@ -86,6 +95,7 @@ const useChatStore = create((set) => ({
       if (res.data.success) {
         toast.success(res.data.msg);
         set({ authUser: null });
+        get().disconnectSocket();
       }
     } catch (error) {
       toast.error(error?.response?.data?.msg);
@@ -155,6 +165,35 @@ const useChatStore = create((set) => ({
   },
 
   setSelectedUser: (user) => set({ selectedUser: user }),
+
+  connectSocket: () => {
+    const { authUser, userId } = get();
+    console.log("User", userId);
+    if (!authUser) return;
+
+    const socket = io(BaseUrl, {
+      query: {
+        userId: userId,
+      },
+    });
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log("Connected to server ✅");
+    });
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server ❌");
+    });
+    set({ socket });
+  },
+  disconnectSocket: () => {
+    const { socket } = get();
+
+    if (socket) {
+      socket.disconnect();
+      set({ socket: null });
+    }
+  },
 }));
 
 export default useChatStore;
