@@ -179,7 +179,10 @@ const useChatStore = create((set, get) => ({
     socket.connect();
 
     socket.on("connect", () => {
-      console.log("Connected to server ✅");
+      console.log("Connected to server ✅", socket.id);
+    });
+    socket.on("onlineUserId", (onlineUserId) => {
+      set({ onlineUsers: onlineUserId });
     });
     socket.on("disconnect", () => {
       console.log("Disconnected from server ❌");

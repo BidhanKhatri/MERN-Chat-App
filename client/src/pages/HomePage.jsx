@@ -8,11 +8,20 @@ import ChatBody from "../components/ChatBody";
 import ChatFooter from "../components/ChatFooter";
 
 const HomePage = () => {
-  const { getLeftSideMsg, leftSideMsgData, setSelectedUser, selectedUser } =
-    useChatStore();
+  const {
+    getLeftSideMsg,
+    leftSideMsgData,
+    setSelectedUser,
+    selectedUser,
+    onlineUsers,
+    authUser,
+    userId,
+  } = useChatStore();
   const [leftData, setLeftData] = useState([]);
   // console.log("leftData", leftData);
   // console.log("selected user", selectedUser);
+  console.log("online users", onlineUsers);
+  console.log("auth", userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,17 +61,22 @@ const HomePage = () => {
                   className="flex items-center gap-4 p-2  hover:bg-neutral-800 cursor-pointer mt-2"
                 >
                   {/* User Profile Image */}
-                  <img
-                    src={items.profilePic || DefaultPP}
-                    alt={`${items.fullName} profile`}
-                    className="w-12 h-12 rounded-full object-cover bg-neutral-300"
-                  />
+                  <div className="relative">
+                    <img
+                      src={items.profilePic || DefaultPP}
+                      alt={`${items.fullName} profile`}
+                      className="w-12 h-12 rounded-full object-cover bg-neutral-300 "
+                    />
+                    {onlineUsers.includes(items._id) && (
+                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 ring-2 ring-white"></span>
+                    )}
+                  </div>
 
                   {/* User Info */}
                   <div>
                     <p className="text-white font-medium">{items.fullName}</p>
                     <p className="text-neutral-400 text-sm truncate">
-                      {"message"}
+                      {onlineUsers.includes(items._id) ? "Online" : "Offline"}
                     </p>
                   </div>
                 </div>
