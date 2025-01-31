@@ -197,6 +197,20 @@ const useChatStore = create((set, get) => ({
       set({ socket: null });
     }
   },
+  getRealTimeMessage: () => {
+    const { socket, setSelectedUser } = get();
+
+    if (!setSelectedUser) return;
+
+    socket.on("newMessage", (newMessage) => {
+      set({ messages: [...get().messages, newMessage] });
+    });
+  },
+
+  removeRealTimeMessage: () => {
+    const { socket } = get();
+    socket.off("newMessage");
+  },
 }));
 
 export default useChatStore;

@@ -1,6 +1,7 @@
 import MessageModel from "../models/message.model.js";
 import UserModel from "../models/user.model.js";
 import cloudinary from "../utils/cloudinary.js";
+import { getReceiverSocketId, io } from "../utils/socket.js";
 
 //display all user msg controller (for left side bar)
 export const leftSideBarMsgController = async (req, res) => {
@@ -85,6 +86,12 @@ export const sendMessageController = async (req, res) => {
     });
 
     await createMessage.save();
+
+    // using socket io to send message to receiver
+    const receiverSockId = getReceiverSocketId(receiverId);
+    if (receiverSockId) {
+      io.to(receiverSockId).emit("newMessage", createMessage);
+    }
 
     return res.status(200).json({
       msg: "Message sent successfully",

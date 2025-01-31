@@ -1,8 +1,8 @@
 import React from "react";
 
-const ChatBodyRightMsg = ({ message }) => {
+const ChatBodyRightMsg = ({ message, ref }) => {
   return (
-    <div className="flex flex-row-reverse gap-4 items-center mb-4">
+    <div ref={ref} className="flex flex-row-reverse gap-4 items-center mb-4">
       {/* Profile Picture */}
       <img
         src={message?.profilePic || "/default-avatar.png"} // Fallback profile pic
